@@ -22,4 +22,22 @@ public class TranslatorAPI {
         return recieved;
     }
 
+    public static Map<String, String> getLangs() throws IOException {
+        String langs = request("https://translate.yandex.net/api/v1.5/tr.json/getLangs?key=" + API_KEY + "&ui=en");
+        langs = langs.substring(langs.indexOf("langs")+7);
+        langs = langs.substring(0, langs.length()-1);
+
+        String[] splitLangs = langs.split(",");
+
+        Map<String, String> languages = new HashMap<String, String>();
+        for (String s : splitLangs) {
+            String[] s2 = s.split(":");
+
+            String key = s2[0].substring(1, s2[0].length()-1);
+            String value = s2[1].substring(1, s2[1].length()-1);
+
+            languages.put(key, value);
+        }
+        return languages;
+    }
 }
