@@ -55,4 +55,11 @@ public class TranslatorAPI {
             throw new RuntimeException(ex.getCause());
         }
     }
+
+    public static String detectLanguage(String text) throws IOException {
+        String query = text;
+        String encodedQuery = encodeValue(query);
+        String response = request("https://translate.yandex.net/api/v1.5/tr.json/detect?key=" + API_KEY + "&text=" + encodedQuery);
+        return response.substring(response.indexOf("lang")+7, response.length()-2);
+    }
 }
