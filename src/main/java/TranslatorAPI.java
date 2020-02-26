@@ -40,4 +40,19 @@ public class TranslatorAPI {
         }
         return languages;
     }
+
+    public static String translate(String text, String sourceLang, String targetLang) throws IOException {
+        String query = text;
+        String encodedQuery = encodeValue(query);
+        String response = request("https://translate.yandex.net/api/v1.5/tr.json/translate?key=" + API_KEY + "&text=" + encodedQuery + "&lang=" + sourceLang + "-" + targetLang);
+        return response.substring(response.indexOf("text")+8, response.length()-3);
+    }
+
+    private static String encodeValue(String value) {
+        try {
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException ex) {
+            throw new RuntimeException(ex.getCause());
+        }
+    }
 }
