@@ -1,10 +1,15 @@
-import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 public class TranslatorAPI {
     public static final String API_KEY = "trnsl.1.1.20200226T160535Z.020875383576e81c.6dd6494b3008021c5beb59f70490c7ecc320acf5";
@@ -61,5 +66,14 @@ public class TranslatorAPI {
         String encodedQuery = encodeValue(query);
         String response = request("https://translate.yandex.net/api/v1.5/tr.json/detect?key=" + API_KEY + "&text=" + encodedQuery);
         return response.substring(response.indexOf("lang")+7, response.length()-2);
+    }
+
+    public static String getKey(Map<String, String> map, String value) {
+        for (String key : map.keySet()) {
+            if (map.get(key).equalsIgnoreCase(value)) {
+                return key;
+            }
+        }
+        return null;
     }
 }
