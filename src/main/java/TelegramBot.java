@@ -8,8 +8,6 @@ import java.util.Map;
 
 public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
-        System.out.println(update.getMessage().getText());
-
         Map<String, String> langs = null;
         try {
             langs = TranslatorAPI.getLangs();
@@ -50,17 +48,22 @@ public class TelegramBot extends TelegramLongPollingBot {
         System.out.println("langs.get(target): " + langs.get(target));
         System.out.println("TranslateAPI.getKey(langs, \"english\"): " + TranslatorAPI.getKey(langs, "english"));
 
+        sendMsg(update.getMessage().getChatId().toString(), output);
+    }
+
+    public synchronized void sendMsg(String chatId, String s) {
         SendMessage message = new SendMessage();
-
-        message.setText(output);
-        message.setChatId(update.getMessage().getChatId());
-
+        message.enableMarkdown(true);
+        message.setChatId(chatId);
+        message.setText(s);
         try {
             execute(message);
         } catch (TelegramApiException e) {
             e.printStackTrace();
+            //log.log(Level.SEVERE, "Exception: ", e.toString());
         }
     }
+
 
     public String getBotUsername() {
         return "dev_translator_bot";
